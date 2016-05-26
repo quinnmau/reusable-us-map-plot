@@ -3,19 +3,20 @@ $(function() {
     var csv;
     var graph = MapPlot()
                     .lat("lat")
-                    .lon("lon");
+                    .lon("lon")
+                    .size("pop");
     
     d3_queue.queue()
         .defer(d3.json, 'json/us.json')
         .defer(d3.csv, 'testData/intro.csv')
-        .defer(d3.csv, 'testData/test.csv')
+        .defer(d3.csv, 'testData/1990.csv')
         .defer(d3.csv, 'testData/test2.csv')
         .await(function(error, s, i, c, c2) {
             graph.map(s);
             draw();
-            $('#button1').on('click', function() {
-                draw(i);
-            });
+            // $('#button1').on('click', function() {
+            //     draw(i);
+            // });
             $('#button2').on('click', function() {
                 draw(c);
             });

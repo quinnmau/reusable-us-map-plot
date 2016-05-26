@@ -10,7 +10,7 @@ function MapPlot() {
     var lat;
     var lon;
     var shape;
-    // var iden;
+    var size;
     
     //constructs a new map with circles on it
     //the 'draw' function
@@ -66,7 +66,7 @@ function MapPlot() {
             
             //circles in current data set with given attributes
             circles.enter().append('circle')
-                            .attr('r', 10)
+                            .attr('r', function(d) {return newRange(+d[size])})
                             .attr('fill', 'blue')
                             .attr('opacity', 0)
                             .attr('cy', function(d) {var arr = projection(d.point); return arr[1]})
@@ -78,8 +78,19 @@ function MapPlot() {
             //updates circles to new positions
             circles.transition().duration(1000)
                             .attr('opacity', 0.4)
+                            .attr('r', function(d) {return newRange(+d[size])})
                             .attr('cy', function(d) {var arr = projection(d.point); return arr[1]})
                             .attr('cx', function(d) {var arr = projection(d.point); return arr[0]});
+                            
+            //convert population to smaller range                
+            function newRange(val) {
+                var oldMin = d3.min(data, function(d) {return +d[size]});
+                var oldMax = d3.max(data, function(d) {return +d[size]});
+                var oldR = (oldMax - oldMin);
+                var newR = 15;
+                var newVal = (((val - oldMin) * newR) / oldR) + 6;
+                return newVal;
+            }
         });
     };
     
@@ -121,14 +132,14 @@ function MapPlot() {
         return chart;
     };
     
-    //sets iden to 'value' to use as unique identifier for points
-    // chart.iden = function(value) {
-    //     if(!arguments.length) {
-    //         return iden;
-    //     }
-    //     iden = value;
-    //     return chart;
-    // };
+    //sets size to 'value' to use as for radius of point
+    chart.size = function(value) {
+        if(!arguments.length) {
+            return size;
+        }
+        size = value;
+        return chart;
+    };
     
     //sets the json to make the map
     chart.map = function(obj) {
