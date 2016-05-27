@@ -10,14 +10,14 @@ function MapPlot() {
     var lat;
     var lon;
     var shape;
-    var size;
+    var size = 10;
     
     //constructs a new map with circles on it
     //the 'draw' function
     function chart(selection) {
         
         //for each element selected DOM element, draw a chart
-        selection.each(function(data, i) {
+        selection.each(function(data) {
             console.log(data);
             
             //format latitude and longitude into arrays of coordinate pairs
