@@ -11,6 +11,7 @@ function MapPlot() {
     var lon;
     var shape;
     var size = 10;
+    var iden;
     
     //constructs a new map with circles on it
     //the 'draw' function
@@ -66,8 +67,9 @@ function MapPlot() {
             
             //circles in current data set with given attributes
             circles.enter().append('circle')
-                            .attr('r', function(d) {return newRange(+d[size])})
+                            .attr('r', 10)
                             .attr('fill', 'blue')
+                            .attr('title', function(d) {return d[iden]})
                             .attr('opacity', 0)
                             .attr('cy', function(d) {var arr = projection(d.point); return arr[1]})
                             .attr('cx', function(d) {var arr = projection(d.point); return arr[0]});
@@ -78,7 +80,8 @@ function MapPlot() {
             //updates circles to new positions
             circles.transition().duration(1000)
                             .attr('opacity', 0.4)
-                            .attr('r', function(d) {return newRange(+d[size])})
+                            .attr('r', 10)
+                            .attr('title', function(d) {return d[iden]})
                             .attr('cy', function(d) {var arr = projection(d.point); return arr[1]})
                             .attr('cx', function(d) {var arr = projection(d.point); return arr[0]});
                             
@@ -91,6 +94,15 @@ function MapPlot() {
                 var newVal = (((val - oldMin) * newR) / oldR) + 6;
                 return newVal;
             }
+            
+            $('svg circle').tipsy({ 
+                gravity: 'w', 
+                html: true, 
+                title: function() {
+                var d = this.__data__;;
+                return d[iden]; 
+                }
+            });
         });
     };
     
@@ -149,6 +161,14 @@ function MapPlot() {
         shape = obj;
         return chart;
     };
+    
+    chart.iden = function(val) {
+        if(!arguments.length) {
+            return iden;
+        }
+        iden = val;
+        return chart;
+    }
     
     return chart;
 };

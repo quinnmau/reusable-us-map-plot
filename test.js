@@ -1,14 +1,31 @@
+var data1 = [
+    {
+        id: 'a',
+        lat: 37,
+        lon: -76
+    }
+];
+
+var data2 = [
+    {
+        id: 'a',
+        lat: 42,
+        lon: -73
+    }
+];
+
 $(function() {
     
     var graph = MapPlot()
                     .lat("lat")
                     .lon("lon")
-                    .size("pop");
+                    .size("pop")
+                    .iden("name");
     
     d3_queue.queue()
         .defer(d3.json, 'json/us.json')
-        .defer(d3.csv, 'testData/1970.csv')
-        .defer(d3.csv, 'testData/1980.csv')
+        .defer(d3.csv, 'testData/winter66avg.csv')
+        .defer(d3.csv, 'testData/winter05avg.csv')
         .defer(d3.csv, 'testData/1990.csv')
         .defer(d3.csv, 'testData/2000.csv')
         .defer(d3.csv, 'testData/2010.csv')
@@ -42,8 +59,6 @@ $(function() {
             .datum(guy)
             .call(graph);
     }
-    
-    
     
     
 });
